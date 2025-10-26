@@ -1,46 +1,36 @@
-# C++ Sales Receipt Generator
+# C++ Sales Data Processor & Receipt Generator
 
-## Project Description
+This C++ project reads sales data from a CSV file (`products.csv`), processes the data, calculates totals for each sale, and prints neatly formatted sales receipts to the console. It demonstrates file I/O with `ifstream`, string parsing with `stringstream`, data handling with parallel `std::vector` containers, and advanced output formatting using the `<iomanip>` library.
 
-This is a simple C++ command-line program that reads sales data from a CSV file (`products.csv`) and generates formatted sales receipts, grouped by Sales ID, directly to the console.
-
-The program automatically calculates column widths based on the data (product names and prices) to ensure the output is neatly aligned, regardless of string lengths.
+---
 
 ## Features
 
-* Parses a comma-separated values (CSV) file.
-* Groups items by their `Sales ID`.
-* Calculates and applies dynamic column widths for clean formatting.
-* Formats and prints a readable receipt for each sale to the standard output.
+* **CSV Parsing**: Reads data from `products.csv`, correctly skipping the header row.
+* **Data Integrity Check**: Includes a check in `loadSalesData` to ensure all parallel vectors (sales IDs, products, quantities, prices) are of equal size after loading, preventing corrupted data from being processed.
+* **Sales Total Calculation**: The `calculateSubtotals` function correctly aggregates item prices (quantity \* price) to find the total for each unique sales ID.
+* **Dynamic Output Formatting**: Automatically calculates the required column widths for products, prices, and quantities using template helper functions (`getMaxColumnWidth`) to produce aligned, readable receipts.
+* **Overloaded Print Function**: Provides two versions of `printSalesData`:
+  1.  A simple version that lists items under each sale.
+  2.  An advanced version that includes item-level subtotals (quantity \* price) and a final, formatted "Sales Total" for each receipt.
 
-## Requirements
+---
 
-* A C++ compiler (e.g., g++, Clang)
-* The C++ Standard Library (no external libraries are needed).
+## File Structure
 
-## Data File Format
+* **`main.cpp`**: The main driver of the program. It initializes the data vectors, calls `loadSalesData` to populate them, and then calls `calculateSubtotals` and `printSomeSalesData` to process and display the results.
+* **`utilities.h`**: The header file defining all function prototypes, global constants (like `SEPARATOR`), and the helper template functions (`getMaxColumnWidth`) used for formatting.
+* **`utilities.cpp`**: The implementation file containing the complete logic for `loadSalesData`, `calculateSubtotals`, and both `printSalesData` functions.
+* **`products.csv`**: The sample input data file containing sales records.
 
-The program expects a `products.csv` file to be present in the same directory as the executable.
+---
 
-* **Columns:** The CSV file **must** follow this exact column order:
-    1.  `Sales ID`
-    2.  `Product Name`
-    3.  `Quantity`
-    4.  `Price`
-* **Header:** The program is configured to skip the first line (header row) by default (controlled by the `FILE_HEADER = true` constant in `main.cpp`).
-* **Delimiter:** Fields must be separated by a comma (`,`).
+## How to Compile & Run
 
-### Example (`products.csv`):
+### Compilation
 
-```csv
-Sales ID,Product Name,Quantity,Price
-1001,Laptop Pro X,1,1200.00
-1001,Ergonomic Mouse,1,25.50
-1001,Wireless Keyboard,1,75.00
-1002,4K Monitor 27in,2,350.99
-1002,USB-C Hub,3,15.99
-1003,Noise Cancelling Headphones,1,199.99
-1003,Portable SSD 1TB,1,89.50
-1003,Webcam HD,1,45.00
-1004,Gaming Chair Deluxe,1,299.00
-1004,Smart Watch S2,1,150.00
+You can compile this project using a C++ compiler like `g++`. Make sure to link both `.cpp` files.
+
+```bash
+# Compile the main program and utility functions
+g++ main.cpp utilities.cpp -o sales_reporter -std=c++17
