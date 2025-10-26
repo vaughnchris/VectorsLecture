@@ -7,36 +7,7 @@ const std::string FILENAME = "products.csv";
 bool FILE_HEADER = true;
 const char SEPARATOR = ',';
 
-void printReciepts(std::vector<std::string> &salesIds,
-    std::vector<std::string> &products,
-    std::vector<double> &prices,
-    std::vector<int> & quantities) {
-    //find the max width of the product and price columns
-    std::string id = "";
-    int maxProductWidth = 0;
-    for (std::string product : products)
-        if (product.length() > maxProductWidth) maxProductWidth = product.length();
-    int maxPriceWidth = 0;
-    for (double price : prices)
-        if (std::to_string(price).length() > maxPriceWidth) maxPriceWidth = std::to_string(price).length();
-    //print the heading for sales
-    std::cout << std::endl << std::right << std::setw(((maxProductWidth + maxPriceWidth) / 2) + 8) << "SALES RECIEPTS" << std::endl;
-    //print out the sales receipts
-    for (int i = 0; i < salesIds.size(); i++) {
-        //if the id is new then create an id heading
-        if (id != salesIds[i]) {
-            std::cout << "Sale-" << salesIds[i];
-            for (int j = 0; j < maxPriceWidth + maxProductWidth - 2; j++)
-                std::cout << "-";
-            std::cout << std::endl;
-            id = salesIds[i];
-        }
-        //print the current items from the vectors
-        std::cout << "  " << std::left << std::setw(maxProductWidth) << products[i]
-            << " " << quantities[i] << " " << std::right << std::setw(maxPriceWidth + 2)
-            << std::fixed <<  std::setprecision(2) << prices[i] << std::endl;
-    }
-}
+void printReciepts(std::vector<std::string>,std::vector<std::string>,std::vector<double>,std::vector<int>);
 
 
 int main() {
@@ -82,7 +53,31 @@ int main() {
     }
     //close the file
     file.close();
-    printReciepts(salesIds, products, prices, quantities);
 
+    //find the max width of the product and price columns
+    std::string id = "";
+    int maxProductWidth = 0;
+    for (std::string product : products)
+        if (product.length() > maxProductWidth) maxProductWidth = product.length();
+    int maxPriceWidth = 0;
+    for (double price : prices)
+        if (std::to_string(price).length() > maxPriceWidth) maxPriceWidth = std::to_string(price).length();
+    //print the heading for sales
+    std::cout << std::endl << std::right << std::setw(((maxProductWidth + maxPriceWidth) / 2) + 8) << "SALES RECIEPTS" << std::endl;
+    //print out the sales receipts
+    for (int i = 0; i < salesIds.size(); i++) {
+        //if the id is new then create an id heading
+        if (id != salesIds[i]) {
+            std::cout << "Sale-" << salesIds[i];
+            for (int j = 0; j < maxPriceWidth + maxProductWidth - 2; j++)
+                std::cout << "-";
+            std::cout << std::endl;
+            id = salesIds[i];
+        }
+        //print the current items from the vectors
+        std::cout << "  " << std::left << std::setw(maxProductWidth) << products[i]
+            << " " << quantities[i] << " " << std::right << std::setw(maxPriceWidth + 2)
+            << std::fixed <<  std::setprecision(2) << prices[i] << std::endl;
+    }
     return 0;
 }
